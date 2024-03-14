@@ -17,9 +17,8 @@ public class AIEngine {
             if( LessThanMoves( board1, 3 )) {
                 suggestion = getBasicMove(computer, board1 );
             } else{
-                suggestion = getSmartMove( compute, board );
+                suggestion = getSmartMove( computer, board1 );
             }
-
             if( suggestion != null )
                 return suggestion;
             throw new IllegalStateException();
@@ -27,11 +26,39 @@ public class AIEngine {
         throw new IllegalStateException();
     }
 
-    private Move getSmartMove( Player computer, TicTacToeBoard board )
+    private Move getSmartMove( Player player, TicTacToeBoard board )
     {
-        //If possible to make the winning move, choose that, else make the move that blocks the user from winning
-        return null;
+        //If possible to either draw or win the game, we will choose it
+        RuleEngine ruleEngine = new RuleEngine();
+        for (int i = 0; i < 3 ; i++) {
+            for (int j = 0; j < 3 ; j++) {
+                if(board.getSymbol( i, j ) == null )
+                {
+                    Move move = new Move( new Cell( i, j ), player ) ;
+                    board.move( move );
+                    if( ruleEngine.getState(board).isOver() ){
+                        return move;
+                    }
+                }
+            }
+        }
+
+        //defensive moves, i.e, preventing the opponent from winning, by making his winning move
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if(board.getSymbol(i,j) == null){
+                    Move move = new Move( new Cell(i, j), player.flip());
+                    board.move(move);
+                    if(ruleEngine.getState(board).isOver()){
+                        return new Move( new Cell(i,j), player );
+                    }
+                }
+            }
+        }
+        //If we don't have a winning or a defensive move, we will choose a basic move
+        return getBasicMove( player, board );
     }
+
     private Move getBasicMove( Player computer, TicTacToeBoard board )
     {
         for( int i = 0 ; i<3 ; i++ )
