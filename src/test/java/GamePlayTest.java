@@ -89,7 +89,7 @@ public class GamePlayTest {
 
             if(!ruleEngine.getState(board).isOver())
             {
-                Move computerMove = aiEngine.suggestMove( board, computer );
+                Move computerMove = aiEngine.suggestMove(computer, board);
                 gameEngine.move( board, computerMove );
             }
         }
