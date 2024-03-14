@@ -33,4 +33,8 @@ public class TicTacToeBoard extends Board {
     public void move(Move move) {
         setCell(move.getCell(), move.getPlayer().getPlayerSymbol());
     }
+
+    public String getSymbol(int i, int j) {
+        return cells[i][j];
+    }
 }

@@ -14,4 +14,9 @@ public class Player {
     public String getPlayerSymbol() {
         return playerSymbol;
     }
+
+    public Player flip() {
+        String flipPlayerSymbol = playerSymbol.equals( "X" )? "O":"X";
+        return new Player( flipPlayerSymbol );
+    }
 }
