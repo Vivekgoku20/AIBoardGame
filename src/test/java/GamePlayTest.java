@@ -78,7 +78,6 @@ public class GamePlayTest {
         int next = 0;
         Player computer = new Player("O");
         Player human = new Player("X");
-
         while(!ruleEngine.getState(board).isOver())
         {
             //getting input from the user
