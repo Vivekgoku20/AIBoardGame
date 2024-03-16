@@ -9,15 +9,15 @@ import game.Player;
 public class AIEngine {
 
 
-    public Move suggestMove( Player computer, Board board ) {
+    public Move suggestMove( Player player, Board board ) {
         if( board instanceof TicTacToeBoard)
         {
             TicTacToeBoard board1 = ( TicTacToeBoard ) board;
             Move suggestion;
             if( LessThanMoves( board1, 3 )) {
-                suggestion = getBasicMove(computer, board1 );
+                suggestion = getBasicMove(player, board1 );
             } else{
-                suggestion = getSmartMove( computer, board1 );
+                suggestion = getSmartMove( player, board1 );
             }
             if( suggestion != null )
                 return suggestion;
@@ -35,8 +35,9 @@ public class AIEngine {
                 if(board.getSymbol( i, j ) == null )
                 {
                     Move move = new Move( new Cell( i, j ), player ) ;
-                    board.move( move );
-                    if( ruleEngine.getState(board).isOver() ){
+                    TicTacToeBoard boardCopy = (TicTacToeBoard) board.copy();
+                    boardCopy.move( move );
+                    if( ruleEngine.getState(boardCopy).isOver() ){
                         return move;
                     }
                 }
@@ -48,8 +49,9 @@ public class AIEngine {
             for (int j = 0; j < 3; j++) {
                 if(board.getSymbol(i,j) == null){
                     Move move = new Move( new Cell(i, j), player.flip());
-                    board.move(move);
-                    if(ruleEngine.getState(board).isOver()){
+                    TicTacToeBoard boardCopy = board.copy();
+                    boardCopy.move(move);
+                    if(ruleEngine.getState(boardCopy).isOver()){
                         return new Move( new Cell(i,j), player );
                     }
                 }
@@ -59,14 +61,14 @@ public class AIEngine {
         return getBasicMove( player, board );
     }
 
-    private Move getBasicMove( Player computer, TicTacToeBoard board )
+    private Move getBasicMove( Player player, TicTacToeBoard board )
     {
         for( int i = 0 ; i<3 ; i++ )
         {
             for( int j=0 ; j<3; j++ )
             {
                 if( board.getCell( i, j ) == null )
-                    return new Move( new Cell( i, j ), computer);
+                    return new Move( new Cell( i, j ), player );
             }
         }
         return null;
