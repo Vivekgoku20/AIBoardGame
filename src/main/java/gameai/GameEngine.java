@@ -21,7 +21,6 @@ public class GameEngine {
         {
             TicTacToeBoard board1 = ( TicTacToeBoard ) board;
             board1.move( move );
-            board1.setCell( move.getCell(), move.getPlayer().getPlayerSymbol() );
         }
         else
         {
