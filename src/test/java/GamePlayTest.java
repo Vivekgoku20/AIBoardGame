@@ -99,7 +99,6 @@ public class GamePlayTest {
                 int secondPlayerCol = secondPlayerMoves[next][1];
 
                 Move computerMove = new Move( new Cell( secondPlayerRow, secondPlayerCol ), secondPlayer );
-
                 gameEngine.move( board, computerMove );
                 System.out.println(board);
             }
