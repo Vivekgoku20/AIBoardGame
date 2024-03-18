@@ -2,14 +2,11 @@ import game.Board;
 import game.Cell;
 import game.Move;
 import game.Player;
-import gameai.AIEngine;
-import gameai.GameEngine;
-import gameai.RuleEngine;
+import gamerules.GameEngine;
+import gamerules.RuleEngine;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class GamePlayTest {
     GameEngine gameEngine;
@@ -92,7 +89,6 @@ public class GamePlayTest {
             col = firstPlayerMoves[next][1];
             Move oppMove = new Move( new Cell( row, col ), firstPlayer );
             gameEngine.move( board, oppMove );
-            System.out.println(board);
             if(!ruleEngine.getState(board).isOver())
             {
                 int secondPlayerRow = secondPlayerMoves[next][0];
@@ -100,7 +96,6 @@ public class GamePlayTest {
 
                 Move computerMove = new Move( new Cell( secondPlayerRow, secondPlayerCol ), secondPlayer );
                 gameEngine.move( board, computerMove );
-                System.out.println(board);
             }
             next++;
         }

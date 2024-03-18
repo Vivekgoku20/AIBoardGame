@@ -1,4 +1,4 @@
-package gameai;
+package gamerules;
 
 import boards.TicTacToeBoard;
 import game.*;
