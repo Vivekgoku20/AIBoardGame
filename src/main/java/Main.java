@@ -1,10 +1,10 @@
 import game.Cell;
 import game.Move;
 import game.Player;
-import gameai.AIEngine;
-import gameai.GameEngine;
+import gamerules.AIEngine;
+import gamerules.GameEngine;
 import game.Board;
-import gameai.RuleEngine;
+import gamerules.RuleEngine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
