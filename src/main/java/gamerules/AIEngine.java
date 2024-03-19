@@ -5,6 +5,11 @@ import game.Board;
 import game.Cell;
 import game.Move;
 import game.Player;
+import placements.ForkPlacement;
+import placements.OffensivePlacement;
+import placements.Placement;
+
+import java.util.Optional;
 
 public class AIEngine {
 
@@ -13,38 +18,58 @@ public class AIEngine {
         if( board instanceof TicTacToeBoard)
         {
             TicTacToeBoard board1 = ( TicTacToeBoard ) board;
-            Move suggestion;
-            if( LessThanMoves( board1, 3 )) {
-                suggestion = getBasicMove(player, board1 );
-            } else{
-                suggestion = getSmartMove( player, board1 );
+            Cell suggestion;
+            int threshold = 3;
+            if( LessThanMoves( board1, threshold )) {
+                suggestion = getBasicMove( board1 );
+            } else if ( LessThanMoves( board1, threshold + 1)){
+                suggestion = getCellToPlay( player, board1 );
+            }
+            else
+            {
+                suggestion = getOptimalCellToPlay( player, board1 );
             }
             if( suggestion != null )
-                return suggestion;
+                return new Move( suggestion, player );
             throw new IllegalStateException();
         }
         throw new IllegalStateException();
     }
 
-    private Move getSmartMove( Player player, TicTacToeBoard board )
+    private Cell getOptimalCellToPlay( Player player, TicTacToeBoard board )
+    {
+        //1. if you have a winning move, play it
+        //2. if opponent has a winning move, block it
+        //3. if you have a fork, play it
+        //4. if opponent has a fork, block it
+        //5. if center is available, take it
+        //6. if corner is available, take it
+        //All the above logic is taken care of by placement classes, by executing them in order, using chained responsibility and singleton design pattern
+        Placement placement = OffensivePlacement.get();
+        while ( placement.next() != null ){
+            Optional<Cell> place = placement.place( board, player );
+            if( placement.place(board, player ).isPresent() ){
+                return place.get();
+            }
+            placement = placement.next();
+        }
+        return null;
+    }
+    private Cell getCellToPlay( Player player, TicTacToeBoard board )
     {
         //If possible to either draw or win the game, we will choose it
         RuleEngine ruleEngine = new RuleEngine();
-        for (int i = 0; i < 3 ; i++) {
-            for (int j = 0; j < 3 ; j++) {
-                if(board.getSymbol( i, j ) == null )
-                {
-                    Move move = new Move( new Cell( i, j ), player ) ;
-                    TicTacToeBoard boardCopy = (TicTacToeBoard) board.copy();
-                    boardCopy.move( move );
-                    if( ruleEngine.getState(boardCopy).isOver() ){
-                        return move;
-                    }
-                }
-            }
-        }
+        Cell best = offense(player, board, ruleEngine);
+        if ( best != null) return best;
 
         //defensive moves, i.e, preventing the opponent from winning, by making his winning move
+        best = defense(player, board, ruleEngine);
+        if ( best != null) return best;
+        //If we don't have a winning or a defensive move, we will choose a basic move
+        return getBasicMove( board );
+    }
+
+    private static Cell defense(Player player, TicTacToeBoard board, RuleEngine ruleEngine) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if(board.getSymbol(i,j) == null){
@@ -52,23 +77,39 @@ public class AIEngine {
                     TicTacToeBoard boardCopy = board.copy();
                     boardCopy.move(move);
                     if(ruleEngine.getState(boardCopy).isOver()){
-                        return new Move( new Cell(i,j), player );
+                        return new Cell(i, j);
                     }
                 }
             }
         }
-        //If we don't have a winning or a defensive move, we will choose a basic move
-        return getBasicMove( player, board );
+        return null;
     }
 
-    private Move getBasicMove( Player player, TicTacToeBoard board )
+    private static Cell offense(Player player, TicTacToeBoard board, RuleEngine ruleEngine) {
+        for (int i = 0; i < 3 ; i++) {
+            for (int j = 0; j < 3 ; j++) {
+                if(board.getSymbol( i, j ) == null )
+                {
+                    Move move = new Move( new Cell( i, j ), player) ;
+                    TicTacToeBoard boardCopy = (TicTacToeBoard) board.copy();
+                    boardCopy.move( move );
+                    if( ruleEngine.getState(boardCopy).isOver() ){
+                        return new Cell(i, j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Cell getBasicMove( TicTacToeBoard board )
     {
         for( int i = 0 ; i<3 ; i++ )
         {
             for( int j=0 ; j<3; j++ )
             {
                 if( board.getCell( i, j ) == null )
-                    return new Move( new Cell( i, j ), player );
+                    return new Cell( i, j );
             }
         }
         return null;

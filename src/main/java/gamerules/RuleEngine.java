@@ -31,61 +31,53 @@ import java.util.Map;
                 return new GameState(false, "******invalid board******");
             }
         }
+        public GameInfo getGameInfo( Board board )
+        {
+            if( board instanceof TicTacToeBoard )
+            {
+                GameState gameState = getState( board );
+                final  String[] players = new String[]{"X", "O"};
+                Cell forkCell = null;
+                boolean canStillWin = false;
+                for (int index = 0; index < 2; index++) {
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
 
-    }
-
-    class GameInfo{
-        private boolean isOver;
-        private String winner;
-        private boolean hasFork;
-        private Player player;
-        private int numberOfMoves;
-        public GameInfo(boolean isOver, String winner, boolean hasFork, Player player, int numberOfMoves )
-        {
-            this.isOver = isOver;
-            this.winner = winner;
-            this.hasFork = hasFork;
-            this.player = player;
-            this.numberOfMoves = numberOfMoves;
-        }
-    }
-    class GameInfoBuilder{
-        private boolean isOver;
-        private String winner;
-        private boolean hasFork;
-        private Player player;
-        private int numberOfMoves;
-        public GameInfoBuilder isOver( boolean isOver )
-        {
-            this.isOver = isOver;
-            return this;
-        }
-
-        public GameInfoBuilder winner( String winner )
-        {
-            this.winner = winner;
-            return this;
-        }
-
-        public GameInfoBuilder hasFork( boolean hasFork )
-        {
-            this.hasFork = hasFork;
-            return this;
-        }
-
-        public GameInfoBuilder player( Player player )
-        {
-            this.player = player;
-            return this;
-        }
-
-        public GameInfoBuilder numberOfMoves( int numberOfMoves )
-        {
-            this.numberOfMoves = numberOfMoves;
-            return this;
-        }
-        public GameInfo build( )
-        {
-            return new GameInfo( isOver, winner, hasFork, player, numberOfMoves );
+                            Board b = board.copy();
+                            Player player = new Player( players[ index ]);
+                            b.move( new Move( new Cell(i,j), player));
+                            for (int k = 0; k < 3; k++) {
+                                for (int l = 0; l < 3; l++) {
+                                    Board b1 = b.copy();
+                                    forkCell = new Cell( k, l );
+                                    b1.move( new Move( forkCell, player.flip()));
+                                    if( getState(b1).getWinner().equals( player.flip().getPlayerSymbol())){
+                                        canStillWin = true;
+                                        break;
+                                    }
+                                }
+                                if( canStillWin){
+                                    break;
+                                }
+                            }
+                            if( !canStillWin ) {
+                                return new GameInfoBuilder()
+                                        .isOver( gameState.isOver())
+                                        .winner( gameState.getWinner() )
+                                        .hasFork(true)
+                                        .forkCell( forkCell )
+                                        .player(player.flip())
+                                        .build();
+                            }
+                        }
+                    }
+                }
+                return new GameInfoBuilder()
+                        .isOver(gameState.isOver())
+                        .winner(gameState.getWinner())
+                        .build();
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     }
