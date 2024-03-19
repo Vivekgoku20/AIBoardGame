@@ -5,3 +5,6 @@ Prototype design pattern - used for the AI to make moves and decide on the optim
 Builder design patter - used to the class GameInfo, to reduce redundant declaration of constructors.
 
 Liskov Substitution principle - We should not have subclass that does not extend all the behaviours of the parent class.
+
+AI Logic:
+Using chain of responsibility through singleton design pattern, hence making the AI logic more readable and extensible so that the chain of rules can be easily modified in isolation.
