@@ -1,10 +1,11 @@
 package gamerules;
 
+import boards.Board;
 import boards.TicTacToeBoard;
 import game.*;
 
 public class GameEngine {
-    public Board start( String type )
+    public Board start(String type )
     {
         if( type.equals("TicTacToeBoard") )
         {

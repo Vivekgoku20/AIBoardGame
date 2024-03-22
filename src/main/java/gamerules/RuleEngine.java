@@ -1,5 +1,6 @@
-    package gamerules;
+package gamerules;
 
+import boards.Board;
 import boards.TicTacToeBoard;
 import game.*;
 
@@ -18,7 +19,7 @@ import java.util.Map;
             if ( board instanceof TicTacToeBoard)
             {
                 TicTacToeBoard board1 = (TicTacToeBoard) board;
-                for( Rule<TicTacToeBoard> r: ruleMap.get(TicTacToeBoard.class.getName()) )
+                for( Rule r: ruleMap.get(TicTacToeBoard.class.getName()) )
                 {
                     GameState gameState = (GameState) r.condition.apply(board1);
                     if( gameState.isOver() ){
@@ -42,10 +43,8 @@ import java.util.Map;
                 for (int index = 0; index < 2; index++) {
                     for (int i = 0; i < 3; i++) {
                         for (int j = 0; j < 3; j++) {
-
-                            Board b = board.copy();
                             Player player = new Player( players[ index ]);
-                            b.move( new Move( new Cell(i,j), player));
+                            Board b = board.move( new Move( new Cell(i,j), player));
                             for (int k = 0; k < 3; k++) {
                                 for (int l = 0; l < 3; l++) {
                                     Board b1 = b.copy();
