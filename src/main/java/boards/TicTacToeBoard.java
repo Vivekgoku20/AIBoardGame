@@ -1,19 +1,24 @@
 package boards;
 
 import gamerules.Rule;
+
 import gamerules.RuleSet;
 
-import game.Board;
 import game.Cell;
 import game.GameState;
 import game.Move;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class TicTacToeBoard implements Board {
+public class TicTacToeBoard implements CellBoard {
     String[][] cells = new String[3][3];
+    History history = new History();
     public String getCell(int i, int j)
     {
         return cells[i][j];
@@ -23,17 +28,17 @@ public class TicTacToeBoard implements Board {
         RuleSet rules = new RuleSet();
 
         //using method inference since the order of arguments is in line
-        rules.add(  new Rule<TicTacToeBoard>( board -> outerTraversal(board::getSymbol) ) );
+        rules.add(  new Rule( board -> outerTraversal(board::getSymbol) ) );
         //cannot use method inference since the arguments are interchanged in the lambda
-        rules.add( new Rule<TicTacToeBoard>(board -> outerTraversal((i, j) -> board.getSymbol(j, i) ) ) );
-        rules.add( new Rule<TicTacToeBoard>( board -> innerTraversal( i -> board.getSymbol( i, i ) ) ) );
-        rules.add( new Rule<TicTacToeBoard>( board -> innerTraversal( i -> board.getSymbol( i, 2- i ) ) ) );
-        rules.add( new Rule<TicTacToeBoard>( board -> {
+        rules.add( new Rule(board -> outerTraversal((i, j) -> board.getSymbol(j, i) ) ) );
+        rules.add( new Rule( board -> innerTraversal( i -> board.getSymbol( i, i ) ) ) );
+        rules.add( new Rule( board -> innerTraversal( i -> board.getSymbol( i, 2- i ) ) ) );
+        rules.add( new Rule( board -> {
             boolean isOver = true;
             for(int i = 0 ;i<3;i++){
                 for(int j = 0;j<3;j++)
                 {
-                    if(board.getCell( i, j ) == null ){
+                    if(board.getSymbol( i, j ) == null ){
                         isOver = false;
                         break; }
                 }
@@ -98,8 +103,11 @@ public class TicTacToeBoard implements Board {
     }
 
     @Override
-    public void move(Move move) {
-        setCell(move.getCell(), move.getPlayer().getPlayerSymbol());
+    public TicTacToeBoard move(Move move) {
+        history.add(this);
+        TicTacToeBoard board = copy();
+        board.setCell(move.getCell(), move.getPlayer().getPlayerSymbol());
+        return board;
     }
 
     public String getSymbol(int i, int j) {
@@ -113,4 +121,28 @@ public class TicTacToeBoard implements Board {
         }
         return ticTacToeBoard;
     }
+}
+
+class History {
+    List<Board> boards = new ArrayList<>();
+
+    public Board getBoardAtMove( int moveIndex )
+    {
+        for (int i = 0; i <=boards.size() - (moveIndex + 1); i++) {
+            boards.remove(boards.size()-1);
+        }
+        return boards.get(moveIndex);
+    }
+
+    public Board undo(){
+        if( boards.isEmpty())
+            throw new IllegalArgumentException();
+        boards.remove(boards.size()-1);
+        return boards.get(boards.size()-1);
+    }
+
+    public void  add(TicTacToeBoard board){
+        boards.add(board);
+    }
+
 }

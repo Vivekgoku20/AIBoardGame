@@ -3,7 +3,7 @@ import game.Move;
 import game.Player;
 import gamerules.AIEngine;
 import gamerules.GameEngine;
-import game.Board;
+import boards.Board;
 import gamerules.RuleEngine;
 
 import java.io.BufferedReader;
