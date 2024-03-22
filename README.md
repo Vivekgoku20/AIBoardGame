@@ -6,6 +6,10 @@ Builder design patter - used to the class GameInfo, to reduce redundant declarat
 
 Liskov Substitution principle - We should not have subclass that does not extend all the behaviours of the parent class.
 
-Momento Design Patter - Storing history of the boards, so that we can undo/replay the game from a point in time.
+Momento Design Pattern - Storing history of the boards, so that we can undo/replay the game from a point in time.
+
+Flyweight Design Pattern, common components and states is moved into one place, so that memory required by an object is much lesser than otherwise.
+
+
 AI Logic:
 Using chain of responsibility through singleton design pattern, hence making the AI logic more readable and extensible so that the chain of rules can be easily modified in isolation.
