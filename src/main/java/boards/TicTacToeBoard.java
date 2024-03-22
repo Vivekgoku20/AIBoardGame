@@ -10,9 +10,7 @@ import game.Move;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -104,7 +102,7 @@ public class TicTacToeBoard implements CellBoard {
 
     @Override
     public TicTacToeBoard move(Move move) {
-        history.add(this);
+        history.add(new Representation(this));
         TicTacToeBoard board = copy();
         board.setCell(move.getCell(), move.getPlayer().getPlayerSymbol());
         return board;
@@ -119,14 +117,15 @@ public class TicTacToeBoard implements CellBoard {
         for (int i = 0; i < 3; i++) {
             System.arraycopy( cells[i], 0, ticTacToeBoard.cells[i], 0, 3 );
         }
+        ticTacToeBoard.history = history;
         return ticTacToeBoard;
     }
 }
 
 class History {
-    List<Board> boards = new ArrayList<>();
+    List<Representation> boards = new ArrayList<>();
 
-    public Board getBoardAtMove( int moveIndex )
+    public Representation getBoardAtMove(int moveIndex )
     {
         for (int i = 0; i <=boards.size() - (moveIndex + 1); i++) {
             boards.remove(boards.size()-1);
@@ -134,15 +133,15 @@ class History {
         return boards.get(moveIndex);
     }
 
-    public Board undo(){
+    public Representation undo(){
         if( boards.isEmpty())
             throw new IllegalArgumentException();
         boards.remove(boards.size()-1);
         return boards.get(boards.size()-1);
     }
 
-    public void  add(TicTacToeBoard board){
-        boards.add(board);
+    public void add(Representation representation){
+        boards.add( representation );
     }
 
 }
