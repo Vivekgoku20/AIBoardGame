@@ -120,28 +120,16 @@ public class TicTacToeBoard implements CellBoard {
         ticTacToeBoard.history = history;
         return ticTacToeBoard;
     }
-}
-
-class History {
-    List<Representation> boards = new ArrayList<>();
-
-    public Representation getBoardAtMove(int moveIndex )
-    {
-        for (int i = 0; i <=boards.size() - (moveIndex + 1); i++) {
-            boards.remove(boards.size()-1);
+    public enum Symbol{
+        X("X"), O("O");
+        String marker;
+        Symbol(String marker){
+            this.marker = marker;
         }
-        return boards.get(moveIndex);
-    }
 
-    public Representation undo(){
-        if( boards.isEmpty())
-            throw new IllegalArgumentException();
-        boards.remove(boards.size()-1);
-        return boards.get(boards.size()-1);
+        public String marker() {
+            return this.marker;
+        }
     }
-
-    public void add(Representation representation){
-        boards.add( representation );
-    }
-
 }
+

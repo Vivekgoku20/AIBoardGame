@@ -1,7 +1,7 @@
 import game.Cell;
 import game.Move;
 import game.Player;
-import gamerules.AIEngine;
+import AI.AIEngine;
 import gamerules.GameEngine;
 import boards.Board;
 import gamerules.RuleEngine;
@@ -27,7 +27,7 @@ public class Main {
             String[] input = br.readLine().split(" ");
             //getting input from the user
             int row = Integer.parseInt(input[0]), column = Integer.parseInt(input[1]);
-            Move oppMove = new Move( new Cell( row, column ), human );
+            Move oppMove = new Move( Cell.getCell( row, column ), human );
             gameEngine.move( board, oppMove );
 
             if(ruleEngine.getState(board).isOver())

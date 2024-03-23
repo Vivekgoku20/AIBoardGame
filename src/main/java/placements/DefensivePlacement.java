@@ -10,15 +10,15 @@ import utils.Utils;
 import java.util.Optional;
 
 public class DefensivePlacement implements Placement{
-    private static Placement defensivePlacement;
+    private static DefensivePlacement defensivePlacement;
 
     //singleton class, no constructor available
     private DefensivePlacement()
     {
 
     }
-    public static synchronized Placement get() {
-        defensivePlacement = (DefensivePlacement)Utils.getIfNull( defensivePlacement, DefensivePlacement::new );
+    public static synchronized DefensivePlacement get() {
+        defensivePlacement = (DefensivePlacement)  Utils.getIfNull( defensivePlacement, DefensivePlacement::new );
         return defensivePlacement;
     }
 
@@ -31,11 +31,11 @@ public class DefensivePlacement implements Placement{
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if(board.getSymbol(i,j) == null){
-                    Move move = new Move( new Cell(i, j), player.flip());
-                    TicTacToeBoard boardCopy = board.copy();
-                    boardCopy.move(move);
+                    Move move = new Move( Cell.getCell(i, j), player.flip());
+                    //The move is creating a copy and returning a new board
+                    TicTacToeBoard boardCopy = board.move(move);
                     if(ruleEngine.getState(boardCopy).isOver()){
-                        return new Cell(i, j);
+                        return Cell.getCell(i, j);
                     }
                 }
             }
