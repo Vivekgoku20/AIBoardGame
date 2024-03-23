@@ -24,7 +24,7 @@ public class ForkPlacement implements Placement {
         return Optional.ofNullable( best );
     }
 
-    public static synchronized Placement get() {
+    public static synchronized ForkPlacement get() {
         forkPlacement = (ForkPlacement) Utils.getIfNull( forkPlacement, ForkPlacement::new );
         return forkPlacement;
     }

@@ -12,7 +12,7 @@ public class CornerPlacement implements Placement{
     private CornerPlacement(){
 
     }
-    public static synchronized Placement get() {
+    public static synchronized CornerPlacement get() {
         cornerPlacement = (CornerPlacement) Utils.getIfNull( cornerPlacement, CornerPlacement::new );
         return cornerPlacement;
     }
@@ -28,7 +28,7 @@ public class CornerPlacement implements Placement{
             int row = corners[i][0];
             int column = corners[i][1];
             if (board.getSymbol(row, column) == null )
-                return new Cell( row, column );
+                return Cell.getCell( row, column );
         }
         return null;
     }
