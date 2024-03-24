@@ -1,4 +1,4 @@
-package AI;
+package Strategy;
 
 import boards.TicTacToeBoard;
 import game.Cell;

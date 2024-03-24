@@ -1,10 +1,14 @@
 package game;
 
+import user.User;
+
 public class Player {
     private int timeUsedInMillis;
     private String playerSymbol;
-    private User Id;
+    private User user;
+
     public Player(String playerSymbol) {
+        this.user = new User();
         this.playerSymbol = playerSymbol;
     }
 
@@ -28,4 +32,10 @@ public class Player {
     public int getTimeUsedInMillis() {
         return timeUsedInMillis;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+
 }

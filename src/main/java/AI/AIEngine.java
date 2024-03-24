@@ -1,5 +1,6 @@
 package AI;
 
+import Strategy.StrategyFactory;
 import boards.TicTacToeBoard;
 import boards.Board;
 import game.Cell;
