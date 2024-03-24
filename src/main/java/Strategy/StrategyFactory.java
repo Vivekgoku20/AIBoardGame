@@ -1,20 +1,12 @@
-package AI;
+package Strategy;
 
-import AI.Strategy;
 import boards.TicTacToeBoard;
-import game.Cell;
-import game.Move;
 import game.Player;
-import gamerules.RuleEngine;
-import placements.OffensivePlacement;
-import placements.Placement;
-
-import java.util.Optional;
 
 public class StrategyFactory {
     public Strategy getStrategy(TicTacToeBoard b, Player player) {
         Strategy strategy = null;
-        int threshold = 3;
+        int threshold = 2;
         if( LessThanMoves( b, threshold )) {
             strategy = new BasicStrategy( );
         } else if ( LessThanMoves( b, threshold + 1)){
