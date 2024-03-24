@@ -12,5 +12,6 @@ Flyweight Design Pattern, common components and states is moved into one place, 
 
 Using factory design pattern in AI logic for generating strategies, and isolating it from AI engine that makes moves, ensuring extensibility and isolation for AIEngine.
 
+Uses Observer design pattern to send Email and SMS notifications to users.
 AI Logic:
 Using chain of responsibility through singleton design pattern, hence making the AI logic more readable and extensible so that the chain of rules can be easily modified in isolation.
